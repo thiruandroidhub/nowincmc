@@ -19,6 +19,8 @@ class MainActivity : ComponentActivity() {
                 navController = rememberNavController()
                 SetupNavGraph(navHostController = navController)
             }
+
+            // TODO add bottombar navigation
         }
     }
 }
