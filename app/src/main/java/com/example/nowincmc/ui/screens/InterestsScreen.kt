@@ -1,6 +1,5 @@
 package com.example.nowincmc.ui.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -15,7 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun DetailsScreen(
+fun InterestsScreen(
     navHostController: NavHostController
 ) {
     Box(
@@ -23,14 +22,7 @@ fun DetailsScreen(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            modifier = Modifier.clickable {
-                navHostController.navigate(route = Screen.Home.route) {
-                    popUpTo(Screen.Home.route) {
-                        inclusive = true
-                    }
-                }
-            },
-            text = "Details",
+            text = "Interests",
             color = Color.Red,
             fontSize = MaterialTheme.typography.h3.fontSize,
             fontWeight = FontWeight.Bold
@@ -40,6 +32,6 @@ fun DetailsScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun DetailsScreenPreview() {
-    DetailsScreen(rememberNavController())
+fun InterestsScreenPreview() {
+    InterestsScreen(rememberNavController())
 }

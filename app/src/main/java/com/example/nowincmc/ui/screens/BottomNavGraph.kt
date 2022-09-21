@@ -7,22 +7,22 @@ import androidx.navigation.compose.composable
 
 
 @Composable
-fun SetupNavGraph(
+fun BottomNavGraph(
     navHostController: NavHostController
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Screen.Home.route
+        startDestination = BottomBarScreen.ForYou.route
     ) {
         composable(
-            route = Screen.Home.route,
+            route = BottomBarScreen.ForYou.route,
         ) {
-            HomeScreen(navHostController)
+            ForYouScreen(navHostController)
         }
         composable(
-            route = Screen.Details.route,
+            route = BottomBarScreen.Interests.route,
         ) {
-            DetailsScreen(navHostController)
+            InterestsScreen(navHostController)
         }
     }
 }
