@@ -1,23 +1,43 @@
 package com.example.nowincmc.ui.screens
 
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.nowincmc.ui.component.NicBackground
+import com.example.nowincmc.ui.component.NicNavigationBar
+import com.example.nowincmc.ui.component.NicNavigationBarItem
 
+@OptIn(
+    ExperimentalMaterial3Api::class,
+)
 @Composable
 fun MainScreen() {
     val navController: NavHostController = rememberNavController()
-    Scaffold(
-        bottomBar = { BottomBar(navController = navController) }
-    ) {
-        BottomNavGraph(navHostController = navController)
+    NicBackground {
+        Scaffold(
+            modifier = Modifier,
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            bottomBar = { BottomBar(navController = navController) }
+        ) {
+            BottomNavGraph(navHostController = navController)
+        }
     }
 }
 
@@ -31,13 +51,21 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    BottomNavigation {
-        screens.forEach {
-            AddItem(
-                screen = it,
-                currentDestination = currentDestination,
-                navController = navController
+    Surface(color = MaterialTheme.colorScheme.surface) {
+        NicNavigationBar(
+            modifier = Modifier.windowInsetsPadding(
+                WindowInsets.safeDrawing.only(
+                    WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                )
             )
+        ) {
+            screens.forEach {
+                AddItem(
+                    screen = it,
+                    currentDestination = currentDestination,
+                    navController = navController
+                )
+            }
         }
     }
 }
@@ -46,27 +74,36 @@ fun BottomBar(navController: NavHostController) {
 fun RowScope.AddItem(
     screen: BottomBarScreen,
     currentDestination: NavDestination?,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
-    BottomNavigationItem(
+    val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
+    NicNavigationBarItem(
         label = {
             Text(text = screen.title)
         },
         icon = {
-            Icon(
-                imageVector = screen.icon,
-                contentDescription = "Nav Icon"
-            )
+            val icon = if (selected) {
+                screen.selectedIcon
+            } else {
+                screen.unselectedIcon
+            }
+            when (icon) {
+                is Icon.ImageVectorIcon -> Icon(
+                    imageVector = icon.imageVector,
+                    contentDescription = null
+                )
+                is Icon.DrawableResourceIcon -> Icon(
+                    painter = painterResource(id = icon.id),
+                    contentDescription = null
+                )
+            }
         },
-        selected = currentDestination?.hierarchy?.any {
-            it.route == screen.route
-        } == true,
+        selected = selected,
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
         },
-        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
     )
 }
