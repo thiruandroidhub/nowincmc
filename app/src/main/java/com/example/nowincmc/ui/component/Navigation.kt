@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.nowincmc.ui.component.NicNavigationDefaults.navigationSelectedItemColor
 
 @Composable
 fun NicNavigationBar(
@@ -44,9 +45,9 @@ fun RowScope.NicNavigationBarItem(
         label = label,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.Red,
+            selectedIconColor = navigationSelectedItemColor(),
             unselectedIconColor = NicNavigationDefaults.navigationContentColor(),
-            selectedTextColor = Color.Red,
+            selectedTextColor = navigationSelectedItemColor(),
             unselectedTextColor = NicNavigationDefaults.navigationContentColor(),
             indicatorColor = NicNavigationDefaults.navigationIndicatorColor()
         )
